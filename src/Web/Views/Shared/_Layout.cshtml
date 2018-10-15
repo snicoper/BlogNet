@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="@(ViewData["MetaDescription"] ?? "Blog de artículos de programación Web")">
+    <meta name="keywords" content="python, django, asp, net, core, vue, css, javascript">
+    <meta name="author" content="Salvador Nicolas<snicoper@gmail.com>">
+
+    @RenderSection("metas", false)
+
+    <link rel="shortcut icon" href="/static/favicon.ico">
+    <link rel="apple-touch-icon" href="/static/favicon.png">
+    <title>@ViewData["Title"] - snicoper.com</title>
+
+    <environment include="Development">
+        <link rel="stylesheet" href="/static/dist/css/main.css" asp-append-version="true">
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="/static/dist/css/main.min.css" asp-append-version="true">
+    </environment>
+
+    @RenderSection("styles", false)
+
+    <!-- google analytics -->
+    <environment exclude="Development">
+        @await Component.InvokeAsync("GAnalytic")
+    </environment><!-- end google analytics -->
+</head>
+<body>
+    @await Component.InvokeAsync("NavBar")
+
+    <main id="main">
+        @await Html.PartialAsync("_Messages", TempData.Get<List<KeyValuePair<string, string>>>("Messages"))
+
+        @RenderBody()
+    </main>
+
+    @await Component.InvokeAsync("Footer")
+
+    <div class="to-top hidden d-none d-md-block"></div>
+
+    @await Html.PartialAsync("_CookieConsent")
+
+    <script src="/static/dist/js/third.js" asp-append-version="true"></script>
+    <environment include="Development">
+        <script src="/static/dist/js/main.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="/static/dist/js/main.min.js" asp-append-version="true"></script>
+    </environment>
+
+    @RenderSection("scripts", false)
+</body>
+</html>

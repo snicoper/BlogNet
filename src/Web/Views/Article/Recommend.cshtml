@@ -1,0 +1,42 @@
+﻿@using Web.ViewModels.ArticleViewModels
+@model Web.ViewModels.ArticleViewModels.RecommendViewModel
+
+@{
+    ViewData["Title"] = $"Recomendar articulo {Model.Title}";
+}
+
+<div class="container">
+    <div class="col-12 col-lg-8 m-auto">
+        <h1>Recomendar articulo</h1>
+        <p class="lead">@Model.Title</p>
+        <hr>
+
+        <form asp-action="Recommend" method="post">
+            <input asp-for="Slug" type="hidden">
+            <div asp-validation-summary="ModelOnly"></div>
+
+            <div class="form-group">
+                <label asp-for="From"></label>
+                <input asp-for="From" class="form-control">
+                <span asp-validation-for="From" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="To"></label>
+                <input asp-for="To" class="form-control">
+                <span asp-validation-for="To" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Body"></label>
+                <textarea asp-for="Body" class="form-control" rows="12"></textarea>
+                <span asp-validation-for="Body" class="small text-danger"></span>
+            </div>
+
+            <button class="btn btn-primary">
+                <i class="fas fa-share"></i> Recomendar
+            </button>
+            <a asp-action="Details" asp-route-slug="@Model.Slug" class="btn btn-secondary">
+                <i class="fas fa-angle-left"></i> Volver al articulo
+            </a>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,28 @@
+﻿<!-- https://github.com/sparksuite/simplemde-markdown-editor -->
+@*
+    IMPORTANTE: Si se cambia la libreria, editar
+    src/Web/wwwroot/static/src/js/vue/components/article_admin/ArticleAdminCreateEditVue.js
+    el metodo uploadImage
+*@
+<script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+<script>
+    // Añadir antes de instanciar SimpleMDE
+    ArticleAdminCreateEditVue()
+
+    // Markdown editor
+    var simplemde = new SimpleMDE({
+        spellChecker: false,
+        hideIcons: ['guide']
+    })
+
+    // Al añadir una imagen de cabecera, hara scroll en la pagina
+    // para ver el resultado, despues volvera a la posición actual.
+    $("#ImageHeader").change(function() {
+        readImagePreview('#image-header', this)
+        $('#image-header').removeClass('hidden')
+        $("html, body").animate({ scrollTop: $('#image-header').offset().top }, 700)
+        setTimeout(function() {
+            $("html, body").animate({ scrollTop: $('#ImageHeader').offset().top }, 700)
+        }, 2000)
+    })
+</script>

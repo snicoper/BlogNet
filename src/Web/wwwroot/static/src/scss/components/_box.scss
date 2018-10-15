@@ -1,0 +1,49 @@
+.box {
+  padding: 0.5rem;
+  font-weight: bold;
+
+  &.box-default {
+    background-color: $light;
+    color: $black;
+  }
+
+  &.box-primary {
+    background-color: theme-color("primary");
+    color: $white;
+  }
+
+  &.box-primary-alter {
+    background-color: theme-color("primary-alter");
+    color: $white;
+  }
+
+  &.box-secondary {
+    background-color: theme-color("secondary");
+    color: $white;
+  }
+
+  &.box-success {
+    background-color: theme-color("success");
+    color: $white;
+  }
+
+  &.box-info {
+    background-color: theme-color("info");
+    color: $white;
+  }
+
+  &.box-warning {
+    background-color: theme-color("warning");
+    color: $white;
+  }
+
+  &.box-danger {
+    background-color: theme-color("danger");
+    color: $white;
+  }
+
+  &.box-dark {
+    background-color: theme-color("dark");
+    color: $white;
+  }
+}

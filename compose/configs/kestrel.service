@@ -1,0 +1,16 @@
+# https://docs.microsoft.com/es-es/aspnet/core/host-and-deploy/linux-nginx?tabs=aspnetcore2x
+[Unit]
+Description=Example .NET Web API App running on Linux
+
+[Service]
+WorkingDirectory=/var/webapps/hellomvc
+ExecStart=/usr/bin/dotnet /var/webapps/hellomvc/hellomvc.dll
+Restart=always
+RestartSec=10  # Restart service after 10 seconds if dotnet service crashes
+SyslogIdentifier=dotnet-example
+User=www-data
+Environment=ASPNETCORE_ENVIRONMENT=Production
+Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false
+
+[Install]
+WantedBy=multi-user.target

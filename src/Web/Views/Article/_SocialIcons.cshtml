@@ -1,0 +1,48 @@
+@using System.Net
+@model Article
+
+@{
+    var scheme = Url.ActionContext.HttpContext.Request.Scheme;
+    var domain = WebUtility.UrlEncode($"{scheme}://{Url.ActionContext.HttpContext.Request.Host}/");
+    var urlArticle = WebUtility.UrlEncode(Url.Action("Details", "Article", new { Model.Slug }, scheme));
+}
+
+<section class="row mt-4">
+    <div class="col-lg-12">
+        <div class="text-center">
+            <div class="btn-social">
+                <a class="facebook"
+                   onclick="window.open('http://www.facebook.com/sharer/sharer.php?u=@urlArticle&amp;title=@Model.Title', '', 'width=500,height=300');">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+            </div>
+
+            <div class="btn-social">
+                <a class="twitter"
+                   onclick="window.open('http://twitter.com/intent/tweet?status=@Model.Title+@urlArticle', '', 'width=500,height=300');">
+                    <i class="fab fa-twitter"></i>
+                </a>
+            </div>
+
+            <div class="btn-social">
+                <a class="gplus"
+                   onclick="window.open('https://plus.google.com/share?url=@urlArticle', '', 'width=500,height=300');">
+                    <i class="fab fa-google-plus-g"></i>
+                </a>
+            </div>
+
+            <div class="btn-social">
+                <a class="linkedin"
+                   onclick="window.open('https://www.linkedin.com/shareArticle?mini=true&amp;url=@urlArticle&amp;title=@Model.Title&amp;source=@domain', '', 'width=500,height=300');">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+            </div>
+
+            <div class="btn-social">
+                <a asp-action="Recommend" asp-route-slug="@Model.Slug" class="envelope">
+                    <i class="fas fa-envelope"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>

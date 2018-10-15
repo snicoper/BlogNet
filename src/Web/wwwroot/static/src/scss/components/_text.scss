@@ -1,0 +1,20 @@
+code {
+  background-color: #f5f5f5 !important;
+  padding: 0.3rem;
+}
+
+.title {
+  border-bottom: 1px solid theme-color("light");
+  padding-bottom: 0.6rem;
+  margin-bottom: 0.6rem;
+}
+
+.valign-middle {
+  vertical-align: middle !important;
+}
+
+blockquote {
+  padding: 0.5rem 1rem 1px;
+  border-left: 0.5rem solid theme-color("primary");
+  background-color: #f5f5f5;
+}

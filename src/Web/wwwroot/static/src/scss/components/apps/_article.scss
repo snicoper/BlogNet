@@ -1,0 +1,138 @@
+.image-edit-article {
+  margin-bottom: 1rem;
+  max-height: 380px;
+  width: 100%;
+}
+
+// List article
+.article-list {
+  .card {
+    height: 450px;
+    max-width: 450px;
+    position: relative;
+
+    .image-header {
+      .card-img-header {
+        max-height: 170px;
+        width: 100%;
+      }
+    }
+
+    .image-header-info {
+      left: 0.5rem;
+      position: absolute;
+      top: 0.5rem;
+    }
+
+    .card-title {
+      background-color: #5e35b1;
+      font-size: 1rem;
+      font-weight: 500;
+      margin-bottom: 0;
+      padding: 0.5rem;
+
+      a {
+        color: $white !important;
+      }
+    }
+
+    .card-body {
+      overflow: hidden;
+      padding: 0.7rem;
+    }
+
+    .card-footer {
+      background-color: $light;
+      border: 0;
+      margin-top: 1rem;
+    }
+  }
+} // end List article
+
+// Details
+.article-details {
+  nav[data-toggle="toc"] {
+    top: 70px;
+  }
+
+  .article-header {
+    .image-header {
+      max-height: 350px;
+      width: 100% !important;
+    }
+
+    .article-title {
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .article-meta {
+      @extend .text-muted;
+      @extend .small;
+
+      border-bottom: 1px solid $border-color;
+      margin-bottom: 1rem;
+    }
+  }
+
+  .article-body {
+    // Embed videos
+    // https://getbootstrap.com/docs/4.1/utilities/embed/
+    //
+    // Example:
+    // <div class="embed-responsive embed-responsive-16by9">
+    //  <iframe class="embed-responsive-item"
+    //          width="560"
+    //          height="315"
+    //          src="https://www.youtube.com/embed/kSILwHK1zd8"
+    //          frameborder="0"
+    //          allow="autoplay; encrypted-media"
+    //          allowfullscreen></iframe>
+    // </div>
+    .embed-responsive {
+      margin: 1rem auto;
+
+      @include media-breakpoint-up(lg) {
+        width: 70%;
+      }
+    }
+
+    // Imágenes subidas para los artículos
+    .image-article-uploaded {
+      @extend .shadow-md;
+
+      display: block;
+      margin: 1rem auto;
+      max-width: 100%;
+
+      @include media-breakpoint-up(lg) {
+        max-width: 70%;
+      }
+    }
+  }
+
+  .article-footer {
+    @extend .text-muted;
+
+    background-color: $light;
+    padding: 0.7rem;
+  }
+}
+
+// Custom upload image
+.inputfile {
+  input[type="file"] {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+  }
+
+  label {
+    @extend .btn;
+    @extend .btn-primary;
+    @extend .btn-sm;
+  }
+}

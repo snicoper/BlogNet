@@ -1,0 +1,32 @@
+site_name: 'Documentación'
+use_directory_urls: false
+
+# Configuration
+theme:
+  name: 'material'
+  language: 'es'
+  palette:
+    primary: 'indigo'
+    accent: 'indigo'
+  font:
+    text: 'Roboto'
+    code: 'Roboto Mono'
+
+# Extensions
+markdown_extensions:
+  - admonition
+  - codehilite:
+      guess_lang: false
+  - toc:
+      permalink: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+
+
+pages:
+  - Home: 'index.md'
+  - Instalación:
+    - Desarrollo: 'install/development.md'
+    - Producción: 'install/production.md'
+  - Code:
+    - Email service: 'code/email_service.md'

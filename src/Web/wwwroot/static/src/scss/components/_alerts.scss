@@ -1,0 +1,68 @@
+.alert {
+  &.alert-success {
+    .title {
+      border-bottom: 1px solid lighten(theme-color("success"), 30%);
+    }
+  }
+
+  &.alert-info {
+    .title {
+      border-bottom: 1px solid lighten(theme-color("info"), 30%);
+    }
+  }
+
+  &.alert-warning {
+    .title {
+      border-bottom: 1px solid lighten(theme-color("warning"), 30%);
+    }
+  }
+
+  &.alert-danger {
+    .title {
+      border-bottom: 1px solid lighten(theme-color("danger"), 30%);
+    }
+  }
+
+  // Iconos
+  &.alert-icon {
+    position: relative;
+    padding-left: 26px;
+
+    &::before {
+      position: absolute;
+      font-family: "Font Awesome 5 Free";
+      font-size: 1rem;
+      font-weight: 900;
+      left: 5px;
+      top: 12px;
+    }
+
+    &.alert-success {
+      &::before {
+        content: "\f058";
+        color: theme-color("success");
+      }
+    }
+
+    &.alert-info {
+      &::before {
+        content: "\f05a";
+        color: theme-color("info");
+      }
+    }
+
+    &.alert-warning {
+      &::before {
+        content: "\f06a";
+        color: theme-color("warning");
+      }
+    }
+
+    &.alert-danger {
+      &::before {
+        content: "\f071";
+        color: theme-color("danger");
+      }
+    }
+  } // end Iconos
+}

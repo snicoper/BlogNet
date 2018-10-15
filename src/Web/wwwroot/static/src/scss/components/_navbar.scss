@@ -1,0 +1,61 @@
+// Input search en navbar
+.navbar-search {
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 2000;
+
+  .form-control {
+    border: 0;
+    height: 60px;
+  }
+
+  .close {
+    position: absolute;
+    right: 30px;
+    top: 18px;
+  }
+}
+
+#main-navbar {
+  // toc utiliza 1020
+  z-index: 1021;
+
+  .nav-item {
+    border-bottom: 2px solid transparent;
+
+    &.active {
+      a {
+        color: theme-color("primary");
+      }
+    }
+
+    @include media-breakpoint-up(lg){
+      &.active {
+        border-color: theme-color("primary");
+      }
+
+      &:hover {
+        border-color: theme-color("primary");
+      }
+    }
+  }
+}
+
+.sub-navbar {
+  border: 1px solid theme-color("light");
+
+  .nav {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+    padding: 0.6rem 0;
+    overflow-x: auto;
+    color: rgba(255, 255, 255, .75);
+    text-align: center;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+}

@@ -1,0 +1,189 @@
+@using Web.ViewModels.ArticleViewModels
+@model Web.ViewModels.ArticleViewModels.DetailsViewModel
+
+@{
+    ViewData["Title"] = Model.Article.Title;
+}
+
+@section styles
+{
+    <link rel="stylesheet" href="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.0/dist/bootstrap-toc.min.css">
+}
+
+@{
+    var scheme = Url.ActionContext.HttpContext.Request.Scheme;
+    var urlSite = $"{scheme}://{Context.Request.Host}";
+    var urlImage = $"{urlSite}/media/{Model.Article.ImageHeader}";
+    var urlArticle = Url.Action("Details", "Article", new { Model.Article.Slug }, scheme);
+}
+
+@section metas
+{
+    <meta property="og:title" content="@Model.Article.Title">
+    <meta property="og:image" content="@urlImage">
+    <meta property="og:description" content="">
+    <meta property="og:url" content="@urlArticle">
+}
+
+<div id="article-details-vue" class="article-details" data-article-id="@Model.Article.Id" v-cloak>
+    <div class="container">
+        <div class="row">
+            <!-- article details -->
+            <div class="@(Model.Article.TableOfContents ? "col-12 col-lg-9" : "col-12")">
+                <!-- article header -->
+                <div class="col-12 article-header">
+                    @if (!string.IsNullOrEmpty(Model.Article.ImageHeader))
+                    {
+                        <img src="~/media/@Model.Article.ImageHeader"
+                             class="img-fluid image-header shadow-md mb-4"
+                             alt="@Model.Article.Title">
+                    }
+                    <h1 class="article-title">@Model.Article.Title</h1>
+
+                    <div class="d-flex flex-md-row article-meta">
+                        <span>
+                            <i class="far fa-calendar-alt"></i>
+                            @Model.Article.CreateAt.ToString("dd/MM/yyyy HH:mm")
+                        </span>
+                        <span class="ml-1">
+                            <strong>by @Model.Article.Owner.UserName</strong>
+                        </span>
+                        <span class="ml-auto">
+                            <span class="badge badge-primary ml-2">@Model.Article.DefaultTag.Name</span>
+                        </span>
+                    </div>
+                </div><!-- end article header -->
+
+                <!-- article body -->
+                <div class="col-12 article-body">
+                    <div v-pre>
+                        <markdown markdown="@Model.Article.Body"></markdown>
+                    </div>
+                </div><!-- end article body -->
+
+                <!-- article footer -->
+                <div class="col-12">
+                    <div class="article-footer">
+                        <div class="d-flex flex-row">
+                            <div>
+                                @foreach (var tag in Model.Article.TagArticles)
+                                {
+                                    <a asp-action="ListByTagName"
+                                       asp-route-tagSlug="@tag.Tag.Slug"
+                                       asp-route-page="1">
+                                        <span class="badge badge-primary">@tag.Tag.Name</span>
+                                    </a>
+                                }
+                            </div>
+                            <div class="small ml-3 mt-1">
+                                Última actualización @Model.Article.UpdateAt.ToString("dd/MM/yyyy HH:mm")
+                            </div>
+                            <div :class="{ 'ml-auto': true, 'text-success': !canVoteLike }">
+                                <i @@click="onIncrease()" class="far fa-thumbs-up cursor-pointer"></i>
+                                <small id="article-likes" data-likes="@Model.Article.Likes">
+                                    {{ likes }}
+                                </small>
+                            </div>
+
+                            @if (User.IsInRole("Admins"))
+                            {
+                                <span class="mx-2">
+                                    <i class="fas fa-eye"></i> <span class="small">@Model.Article.Views</span>
+                                </span>
+                                <div>
+                                    <a asp-controller="ArticleAdmin" asp-action="Edit"
+                                       asp-route-id="@Model.Article.Id"
+                                       class="ml-2"
+                                       target="_blank"
+                                       data-toggle="tooltip"
+                                       title="Editar articulo">
+                                        <i class="far fa-edit"></i>
+                                    </a>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div><!-- end article footer -->
+            </div><!-- end article details -->
+
+            <!-- article content -->
+            <div class="@(Model.Article.TableOfContents ? "col-lg-3 d-none d-lg-block" : "hidden")">
+                <nav id="toc" class="sticky-top">
+                    <h5 class="title">Tabla de contenido</h5>
+                </nav>
+            </div><!-- end article content -->
+
+            <!-- google analytics -->
+            <environment exclude="Development">
+                <div class="col-lg-8 m-auto mt-3">
+                    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+                    <!-- snicoper.com -->
+                    <ins class="adsbygoogle"
+                         style="display: block"
+                         data-ad-client="ca-pub-1079279802884664"
+                         data-ad-slot="8554105431"
+                         data-ad-format="auto"></ins>
+                    <script>
+                        (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
+                </div>
+            </environment><!-- end google analytics -->
+
+            <!-- social icons -->
+            <div class="col-12 mt-3">
+                <div>
+                    @await Html.PartialAsync("_SocialIcons", Model.Article)
+                </div>
+            </div><!-- end social icons -->
+
+            <!-- next and previous article -->
+            <div class="col-12">
+                <div class="d-md-flex flex-row mt-3">
+                    <span>
+                        @if (Model.PreviousArticle != null)
+                        {
+                            <a asp-action="Details"
+                               asp-route-slug="@Model.PreviousArticle.Slug"
+                               class="btn btn-light btn-xs-block">
+                                <i class="fas fa-angle-left"></i> @Model.PreviousArticle.Title
+                            </a>
+                        }
+                    </span>
+                    <span class="ml-auto">
+                        @if (Model.NextArticle != null)
+                        {
+                            <a asp-action="Details"
+                               asp-route-slug="@Model.NextArticle.Slug"
+                               class="btn btn-light btn-xs-block">
+                                @Model.NextArticle.Title <i class="fas fa-angle-right"></i>
+                            </a>
+                        }
+                    </span>
+                </div>
+            </div><!-- end next and previous article -->
+
+            <!-- disqus -->
+            <div class="col-12">
+                <div class="mt-3">
+                    @await Component.InvokeAsync("DisqusComments", Model.Article)
+                </div>
+            </div><!-- end disqus -->
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.0/dist/bootstrap-toc.min.js"></script>
+    <script>
+        $(function() {
+            var navSelector = '#toc'
+            var $myNav = $(navSelector)
+            Toc.init($myNav);
+            $('body').scrollspy({
+                target: navSelector
+            })
+        })
+        ArticleDetailsVue();
+    </script>
+}

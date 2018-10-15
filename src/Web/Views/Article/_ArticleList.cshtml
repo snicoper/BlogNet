@@ -1,0 +1,58 @@
+@using Web.ViewModels.ArticleViewModels
+@model Web.ViewModels.ArticleViewModels.ListViewModel
+
+<h1 class="hidden">Lista de artículos</h1>
+
+<div class="row">
+    @foreach (var article in Model.ObjectList)
+    {
+        <div class="col-md-6 col-lg-4 mb-3 article-list">
+            <div class="card border-0 shadow-md">
+                <div class="image-header">
+                    <a asp-action="Details" asp-route-slug="@article.Slug">
+                        <img src="~/media/@article.DefaultTag.Image"
+                            class="card-img-header"
+                            alt="@article.DefaultTag.Name">
+                    </a>
+                </div>
+
+                <div class="image-header-info">
+                    <a asp-action="ListByTagName"
+                       asp-route-tagSlug="@article.DefaultTag.Slug"
+                       asp-route-page="1">
+                        <span class="badge badge-warning">@article.DefaultTag.Name</span>
+                    </a>
+                </div>
+
+                <div class="card-title">
+                    <a asp-action="Details" asp-route-slug="@article.Slug">@article.Title</a>
+                </div>
+
+                <div class="card-body">
+                    @{
+                        var body = article.Body.Length > 400 ? article.Body.Substring(0, 400) : article.Body;
+                    }
+                    <markdown markdown="@body"></markdown>
+                </div>
+
+                <div class="card-footer">
+                    <div class="d-flex flex-row">
+                        <div>
+                            @foreach (var tag in article.TagArticles)
+                            {
+                                <a asp-action="ListByTagName"
+                                   asp-route-tagSlug="@tag.Tag.Slug"
+                                   asp-route-page="1">
+                                    <span class="badge badge-primary">@tag.Tag.Name</span>
+                                </a>
+                            }
+                        </div>
+                        <div class="ml-auto">
+                            <span class="badge badge-dark">@article.Owner.UserName</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

@@ -1,0 +1,174 @@
+@model Web.ViewModels.ArticleAdminViewModels.ListViewModel
+
+@{
+    ViewData["Title"] = "Lista de artículos";
+}
+
+
+@await Component.InvokeAsync("NavbarAdmin")
+
+<div id="article-admin-list-vue" class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="title">@ViewData["Title"]</h1>
+
+            @await Html.PartialAsync("Grid/_GridHeader")
+
+            <!-- Filtros de búsqueda -->
+            <div class="row">
+                <div class="col-12">
+                    <div id="collapseFilters" class="collapse">
+                        <div class="row">
+                            <div class="col-md-6 col-lg-3 mb-2">
+                                <input asp-for="Title"
+                                       class="form-control form-control-sm"
+                                       v-model="title"
+                                       placeholder="Titulo">
+                            </div>
+                            <div class="col-md-6 col-lg-3 mb-2">
+                                <input asp-for="Body"
+                                       class="form-control form-control-sm"
+                                       v-model="body"
+                                       placeholder="Contenido">
+                            </div>
+                            <div class="col-md-6 col-lg-3 mb-2 input-group">
+                                <input asp-for="CreateAt"
+                                       v-model="createAt"
+                                       id="datetimepickerCreateAt"
+                                       class="form-control form-control-sm"
+                                       placeholder="Fecha registro"
+                                       data-toggle="datetimepicker"
+                                       data-target="#datetimepickerCreateAt">
+                                <span class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="far fa-calendar-alt"></i>
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="col-md-6 col-lg-3 mb-2 input-group">
+                                <input asp-for="UpdateAt"
+                                       v-model="updateAt"
+                                       id="datetimepickerUpdateAt"
+                                       class="form-control form-control-sm"
+                                       placeholder="Ultima actualización"
+                                       data-toggle="datetimepicker"
+                                       data-target="#datetimepickerUpdateAt">
+                                <span class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="far fa-calendar-alt"></i>
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="col-md-6 col-lg-3 mb-2">
+                                <select asp-for="Owner"
+                                        asp-items="@Model.OwnerList"
+                                        v-model="owner"
+                                        class="custom-select custom-select-sm">
+                                </select>
+                            </div>
+                            <div class="col-md-6 col-lg-3 mb-2">
+                                <select asp-for="DefaultTag"
+                                        asp-items="@Model.DefaultTagList"
+                                        v-model="defaultTag"
+                                        class="custom-select custom-select-sm">
+                                </select>
+                            </div>
+                            <div class="col-md-6 col-lg-3 mb-2">
+                                <select asp-for="Active"
+                                        asp-items="@Model.ActiveList"
+                                        v-model="active"
+                                        class="custom-select custom-select-sm"></select>
+                            </div>
+                        </div>
+                        <div class="row my-2">
+                            <div class="col-12">
+                                <button @@click="onFilterReset" class="btn btn-sm btn-outline-info btn-unfocus">
+                                    <i class="fas fa-sync"></i> Reset
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- end Filtros de búsqueda -->
+
+            <!-- Tabla con datos -->
+            <div class="row">
+                <div class="col-12">
+                    <table class="table table-striped table-responsive-lg">
+                        <thead class="box box-dark">
+                            <tr>
+                                <th is="grid-column" :field="'title'" field-name="Titulo"></th>
+                                <th is="grid-column" :field="'createAt'" field-name="Fecha de creación"></th>
+                                <th is="grid-column" :field="'updateAt'" field-name="Ultima actualización"></th>
+                                <th is="grid-column" :field="'owner'" field-name="Autor"></th>
+                                <th is="grid-column" :field="'views'" field-name="Visitas"></th>
+                                <th is="grid-column" :field="'likes'" field-name="Likes"></th>
+                                <th is="grid-column" :field="'defaultTag'" field-name="Etiqueta"></th>
+                                <th is="grid-column" :field="'active'" field-name="Activo" class="text-right"></th>
+                                <th>&nbsp;</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-show="loading">
+                                <td class="text-center" colspan="9">
+                                    <img class="img-loading" src="~/static/dist/img/loading.gif" alt="loading">
+                                    <small class="text-info">Cargando...</small>
+                                </td>
+                            </tr>
+                            <tr v-show="isEmptyAndNotLoading">
+                                <td class="text-center" colspan="9">
+                                    <h5>No hay artículos para mostrar</h5>
+                                </td>
+                            </tr>
+                            <tr v-for="article in getObjectList">
+                                <td>
+                                    <a :href="getLinkDetails(article.slug)" target="_blank">{{ article.title }}</a>
+                                </td>
+                                <td>{{ article.createAt }}</td>
+                                <td>{{ article.updateAt }}</td>
+                                <td>{{ article.owner.userName }}</td>
+                                <td>{{ article.views }}</td>
+                                <td>{{ article.likes }}</td>
+                                <td>
+                                    <span class="badge badge-primary">{{ article.defaultTag.name }}</span>
+                                </td>
+                                <td class="text-right">
+                                    <span v-if="article.active">
+                                        <i class="far fa-check-circle text-success"></i>
+                                    </span>
+                                    <span v-else>
+                                        <i class="fas fa-ban text-danger"></i>
+                                    </span>
+                                </td>
+                                <td class="text-right">
+                                    <a :href="getLinkEdit(article.id)">
+                                        <i class="far fa-edit text-info"></i>
+                                    </a>
+                                    <a @@click="onDelete(article.id)" class="ml-3" href="javascript:void(0)">
+                                        <i class="fas fa-trash text-danger"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div><!-- end Tabla con datos -->
+
+            @await Html.PartialAsync("Grid/_GridPaginate")
+
+            <div>
+                <hr>
+                <a asp-action="Create" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Crear articulo
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <script>
+        ArticleAdminListVue()
+    </script>
+}

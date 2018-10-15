@@ -1,0 +1,33 @@
+// Botón subir pagina.
+// Usa Material Icons para la fuente.
+.to-top {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 30px;
+  bottom: 10px;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+  display: none;
+  height: 46px;
+  position: fixed;
+  right: 10px;
+  width: 46px;
+
+  &::before {
+    color: rgb(68, 110, 155);
+    content: "\f106";
+    font-family: "Font Awesome 5 Free";
+    font-size: 30px;
+    font-weight: 900;
+    left: 14px;
+    position: relative;
+    top: -1px;
+  }
+
+  &:hover {
+    background-color: theme-color("primary");
+    cursor: pointer;
+  }
+
+  &:hover::before {
+    color: rgb(255, 255, 255);
+  }
+}

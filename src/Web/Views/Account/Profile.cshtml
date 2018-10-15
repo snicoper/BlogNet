@@ -1,0 +1,118 @@
+@model Web.ViewModels.AccountViewModels.ProfileViewModel
+
+@{
+    ViewData["Title"] = "Perfil de usuario";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="title">@ViewData["Title"]</h1>
+            <div class="row">
+                <div class="col-12">
+                    <div class="text-center mb-3">
+                        <img src="~/media/@Model.User.Photo" alt="Avatar usuario"><br>
+                        <a asp-action="EditPhoto" class="btn btn-outline-primary btn-sm mt-2">
+                            <i class="fas fa-pencil-alt"></i> Cambiar imagen
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <table class="table table-striped">
+                <tbody>
+                <tr>
+                    <td><i class="fas fa-user"></i> Nombre de usuario</td>
+                    <td class="text-right">
+                        <span class="text-info">@Model.User.UserName</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td><i class="fas fa-envelope"></i> Email</td>
+                    <td class="text-right">
+                        @Model.User.Email
+                        <a asp-action="EditEmail" class="btn btn-sm btn-light">
+                            <i class="fas fa-pencil-alt"></i>
+                        </a>
+                    </td>
+                </tr>
+                @if (!string.IsNullOrEmpty(Model.User.TemporalEmailChange))
+                {
+                    <tr>
+                        <td><i class="fas fa-envelope"></i> Email por confirmar</td>
+                        <td class="text-right">
+                            @Model.User.TemporalEmailChange
+                            <a asp-action="RemoveTemporalEmail"
+                               class="btn btn-sm btn-light"
+                               data-toggle="tooltip"
+                               title="Descartar">
+                                <i class="fas fa-trash text-danger"></i>
+                            </a>
+                            <i class="fas fa-question-circle text-info"
+                               data-toggle="tooltip"
+                               title="Para mandar otra validación, haz un cambio de email">
+                            </i>
+                        </td>
+                    </tr>
+                }
+                <tr>
+                    <td><i class="fas fa-unlock-alt"></i> Contraseña</td>
+                    <td class="text-right">
+                        ************
+                        <a asp-action="EditPassword" class="btn btn-sm btn-light">
+                            <i class="fas fa-pencil-alt"></i>
+                        </a>
+                    </td>
+                </tr>
+                @if (Model.User.SubscribeArticleId != null)
+                {
+                    <tr>
+                        <td><i class="fas fa-newspaper"></i> Anular subscribción de nuevos articulos</td>
+                        <td class="text-right">
+                            <form asp-controller="ArticleSubscribe" asp-action="UnSubscribe" method="get">
+                                <input type="hidden" name="ReturnUrl" value="@Context.Request.Path">
+                                <input type="hidden" name="Token" value="@Model.User.SubscribeArticle.Token">
+                                <button class="btn btn-sm btn-link">
+                                    <i class="fas fa-trash text-danger"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <td>
+                            <i class="fas fa-newspaper"></i> Subcribirse nuevos articulos<br>
+                            <span class="small text-muted">Recibiras un correo cuando se cree un nuevo articulo</span>
+                        </td>
+                        <td class="text-right">
+                            <form asp-controller="ArticleSubscribe" asp-action="Subscribe" method="post">
+                                <input type="hidden" name="ReturnUrl" value="@Context.Request.Path">
+                                <input type="hidden" name="EmailSubscribe" value="@Model.User.Email">
+                                <button class="btn btn-sm btn-link"
+                                        type="submit"
+                                        data-toggle="tooltip"
+                                        title="Subcribirse">
+                                    <i class="far fa-plus-square text-success"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+
+            <hr>
+            <a href="#" class="btn btn-primary disabled">
+                <i class="fas fa-pencil-alt"></i> Editar
+            </a>
+            @if (User.IsInRole("Admins"))
+            {
+                <a asp-action="Index" asp-controller="AccountAdmin" class="btn btn-warning">
+                    <i class="fas fa-cogs"></i> Administración
+                </a>
+            }
+        </div>
+    </div>
+</div>

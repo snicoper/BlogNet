@@ -1,0 +1,26 @@
+@charset "UTF-8";
+
+// Variables
+@import "variables";
+
+// Font-awesome.
+@import "../../../node_modules/@fortawesome/fontawesome-free-webfonts/scss/fontawesome";
+@import "../../../node_modules/@fortawesome/fontawesome-free-webfonts/scss/fa-solid";
+@import "../../../node_modules/@fortawesome/fontawesome-free-webfonts/scss/fa-regular";
+@import "../../../node_modules/@fortawesome/fontawesome-free-webfonts/scss/fa-brands";
+
+// Bootstrap.
+@import "../../../node_modules/bootstrap/scss/bootstrap";
+
+// Toastr.
+@import "../../../node_modules/toastr/toastr";
+
+// Select2
+@import "../../../node_modules/select2/src/scss/core";
+@import "../../../node_modules/select2-bootstrap4-theme/src/select2-bootstrap4";
+
+// Roboto.
+@import "roboto";
+
+// Components
+@import "components/main";

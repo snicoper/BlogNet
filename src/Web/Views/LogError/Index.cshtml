@@ -1,0 +1,177 @@
+@model Web.ViewModels.LogErrorViewModels.ListViewModel
+
+@{
+    ViewData["Title"] = "Registro de errores";
+}
+
+
+@await Component.InvokeAsync("NavbarAdmin")
+
+<div id="logerror-index-vue" class="container-fluid" v-cloak>
+    <div class="row">
+        <div class="col-12">
+            <h1 class="title">@ViewData["Title"]</h1>
+
+            @await Html.PartialAsync("Grid/_GridHeader")
+
+            <!-- Filtros de búsqueda -->
+            <div class="row">
+                <div class="col-12">
+                    <div id="collapseFilters" class="collapse">
+                        <div class="row">
+                            <div class="col-md-6 col-lg-3 mb-2 input-group">
+                                <input asp-for="CreateAt"
+                                       v-model="createAt"
+                                       id="datetimepickerCreateAt"
+                                       class="form-control form-control-sm"
+                                       placeholder="Fecha"
+                                       data-toggle="datetimepicker"
+                                       data-target="#datetimepickerCreateAt">
+                                <span class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="far fa-calendar-alt"></i>
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="col-md-6 col-lg-3 mb-2">
+                                <input asp-for="Username"
+                                       class="form-control form-control-sm"
+                                       v-model="username"
+                                       placeholder="Usuario">
+                            </div>
+                            <div class="col-md-6 col-lg-3 mb-2">
+                                <input asp-for="Path"
+                                       class="form-control form-control-sm"
+                                       v-model="path"
+                                       placeholder="URL">
+                            </div>
+                            <div class="col-md-6 col-lg-3 mb-2">
+                                <input asp-for="Message"
+                                       class="form-control form-control-sm"
+                                       v-model="message"
+                                       placeholder="Mensaje">
+                            </div>
+                            <div class="col-md-6 col-lg-3 mb-2">
+                                <select v-model="checked" asp-for="Checked" class="custom-select custom-select-sm">
+                                    <option value="" selected>-- ¿Error leído? --</option>
+                                    <option value="true">Leído</option>
+                                    <option value="false">Sin leer</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row my-2">
+                            <div class="col-12">
+                                <button @@click="onFilterReset" class="btn btn-sm btn-outline-info btn-unfocus">
+                                    <i class="fas fa-sync"></i> Reset
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- end Filtros de búsqueda -->
+
+            <!-- Tabla con datos -->
+            <div class="row">
+                <div class="col-12">
+                    <table class="table table-striped table-responsive-lg">
+                        <thead class="box box-dark">
+                            <tr>
+                                <th is="grid-column" :field="'createAt'" field-name="Fecha"></th>
+                                <th is="grid-column" :field="'username'" field-name="Usuario"></th>
+                                <th is="grid-column" :field="'path'" field-name="Url"></th>
+                                <th is="grid-column" :field="'message'" field-name="Mensaje"></th>
+                                <th is="grid-column" :field="'checked'" field-name="Leído"></th>
+                                <td>&nbsp;</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-show="loading">
+                                <td class="text-center" colspan="6">
+                                    <img class="img-loading" src="~/static/dist/img/loading.gif" alt="loading">
+                                    <small class="text-info">Cargando...</small>
+                                </td>
+                            </tr>
+                            <tr v-show="isEmptyAndNotLoading">
+                                <td class="text-center" colspan="6">
+                                    <h5>No hay errores para mostrar</h5>
+                                </td>
+                            </tr>
+                            <tr v-for="error in getObjectList" :id="'log-error-' + error.id">
+                                <td class="text-success">{{ error.createAt }}</td>
+                                <td class="text-info">{{ error.username }}</td>
+                                <td class="text-info">{{ error.path }}</td>
+                                <td @@click="onModalStackTrace(error.id)"
+                                    class="cursor-pointer"
+                                    data-toggle="modal"
+                                    data-target="#modal-stack-trace">
+                                    <code class="bg-transparent">{{ error.message }}</code>
+                                </td>
+                                <td v-if="error.checked" class="text-info">
+                                    <i class="far fa-check-circle text-success"></i>
+                                </td>
+                                <td v-else class="text-info">
+                                    <i class="fas fa-ban text-danger"></i>
+                                </td>
+                                <td class="text-right">
+                                    <a @@click="onDelete(error.id)" href="javascript:void(0)">
+                                        <i class="fas fa-trash text-danger"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div><!-- end Tabla con datos -->
+
+            @await Html.PartialAsync("Grid/_GridPaginate")
+
+            <div class="row">
+                <div class="col-12">
+                    <hr>
+                    <div v-if="objectList && objectList.length > 0" class="d-flex flex-row">
+                        <form asp-action="DeleteAll" method="post" class="mr-3">
+                            <button class="btn btn-danger" type="submit">
+                                <i class="fas fa-trash"></i> Eliminar todos
+                            </button>
+                        </form>
+
+                        <form asp-action="MarkAllRead" method="post">
+                            <button class="btn btn-warning" type="submit">
+                                <i class="fas fa-eye"></i> Marcar todos como leídos
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal message -->
+    <div id="modal-stack-trace" class="modal fade">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ messageModal }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+<pre>
+<code class="no-highlight bg-transparent text-danger">{{ stackTrace }}</code>
+</pre>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div><!-- end Modal message -->
+</div>
+
+@section scripts
+{
+    <script>
+        LogErrorIndexVue()
+    </script>
+}

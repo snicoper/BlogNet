@@ -1,0 +1,107 @@
+@model Web.ViewModels.AccountAdminViewModels.EditViewModel
+
+@{
+    ViewData["Title"] = "Editar cuenta de usuario";
+}
+
+
+@await Component.InvokeAsync("NavbarAdmin")
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="title">
+                @ViewData["Title"] <small>@Model.UserName</small>
+            </h1>
+            <div class="alert alert-info alert-icon">
+                <strong>Fecha de creación</strong> <small>@Model.CreateAt</small>
+                <strong>Ultimo acceso</strong> <small>@Model.LastLogin</small>
+            </div>
+
+            <div class="box box-default mb-2">Datos personales</div>
+
+            <form asp-action="EditAccount" asp-route-userId="@Model.Id" method="post">
+                <div asp-validation-summary="ModelOnly"></div>
+                <input asp-for="Id" type="hidden">
+
+                <div class="form-row">
+                    <div class="col-lg-6 form-group">
+                        <label asp-for="UserName"></label>
+                        <input asp-for="UserName" class="form-control">
+                        <span asp-validation-for="UserName"></span>
+                    </div>
+                    <div class="col-lg-6 form-group">
+                        <label asp-for="Email"></label>
+                        <input asp-for="Email" class="form-control">
+                        <span asp-validation-for="Email"></span>
+                    </div>
+                    <div class="col-lg-6 form-group">
+                        <label asp-for="PhoneNumber"></label>
+                        <input asp-for="PhoneNumber" class="form-control">
+                        <span asp-validation-for="PhoneNumber"></span>
+                    </div>
+
+                    <div class="col-12 box box-default mb-2">Contraseña</div>
+
+                    <div class="col-lg-6 form-group">
+                        <label asp-for="NewPassword"></label>
+                        <input asp-for="NewPassword" class="form-control">
+                        <span asp-validation-for="NewPassword"></span>
+                    </div>
+                    <div class="col-lg-6 form-group">
+                        <label asp-for="ReNewPassword"></label>
+                        <input asp-for="ReNewPassword" class="form-control">
+                        <span asp-validation-for="ReNewPassword"></span>
+                    </div>
+
+                    <div class="col-12 box box-default mb-2">Permisos</div>
+
+                    <div class="col-lg-12 form-group">
+                        <div class="custom-control custom-checkbox">
+                            <input asp-for="EmailConfirmed" class="custom-control-input">
+                            <label asp-for="EmailConfirmed" class="custom-control-label"></label>
+                            <span class="text-muted small d-block">
+                                No podrá acceder hasta que confirme el Email
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12 form-group">
+                        <div class="custom-control custom-checkbox">
+                            <input asp-for="Active" class="custom-control-input">
+                            <label asp-for="Active" class="custom-control-label"></label>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12 form-group">
+                        <label asp-for="Roles"></label>
+                        @foreach (var role in Model.Roles)
+                        {
+                            <div class="form-group custom-control custom-checkbox">
+                                <input id="@role.Key"
+                                       class="custom-control-input"
+                                       type="checkbox"
+                                       name="IdRolesToAdd"
+                                       value="@role.Value"
+                                       @role.Selected>
+                                <label class="custom-control-label" for="@role.Key">
+                                    @role.Value
+                                </label>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="col-lg-12 mb-3">
+                        <hr>
+                        <button class="btn btn-primary" type="submit">
+                            <i class="far fa-save"></i> Guardar
+                        </button>
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-angle-left"></i> Volver
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

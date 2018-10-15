@@ -1,0 +1,20 @@
+﻿<div class="d-flex flex-row mb-2">
+    <div class="mr-2 ml-auto">
+        <select v-model="pageSize" id="PageSize" class="custom-select custom-select-sm">
+            <option value="">-- Items a mostrar --</option>
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+        </select>
+    </div>
+    <span>
+        <button @@click="onBtnFilterClick"
+                class="btn btn-sm btn-outline-secondary btn-unfocus"
+                type="button"
+                data-toggle="collapse"
+                data-target="#collapseFilters">
+            <i class="fas fa-filter"></i> Filtros <i id="icon-filter" class="fas fa-caret-down"></i>
+        </button>
+    </span>
+</div>

@@ -1,0 +1,57 @@
+@model NavbarAdminViewModel
+
+@* Cada link de manera explicita se verifica quien puede verlos *@
+
+<div class="sub-navbar bg-white">
+    <nav class="nav">
+        <a asp-controller="Admin" asp-action="Index" class="nav-link">
+            <i class="fas fa-cogs"></i> Administración
+        </a>
+        <a asp-controller="AccountAdmin" asp-action="Index" class="nav-link">
+            <i class="fas fa-users"></i> Usuarios
+        </a>
+        <!-- Blog links -->
+        <div>
+            <a class="nav-link dropdown-toggle"
+               href="#"
+               id="navbarDropdownBlog"
+               role="button"
+               data-toggle="dropdown"
+               aria-haspopup="true"
+               aria-expanded="false">
+                <i class="fas fa-newspaper"></i> Blog
+            </a>
+            <div class="dropdown-menu border-0 rounded-0" aria-labelledby="navbarDropdownBlog">
+                <a asp-controller="TagAdmin" asp-action="List" class="dropdown-item">
+                    <i class="fas fa-list-ul mr-1"></i> Lista de etiquetas
+                </a>
+                <a asp-controller="ArticleAdmin" asp-action="List" class="dropdown-item">
+                    <i class="fas fa-list-ul mr-1"></i> Lista de artículos
+                </a>
+                <div class="dropdown-divider"></div>
+                <a asp-controller="TagAdmin" asp-action="Create" class="dropdown-item">
+                    <i class="fas fa-plus mr-1"></i> Crear etiqueta
+                </a>
+                <a asp-controller="ArticleAdmin" asp-action="Create" class="dropdown-item">
+                    <i class="fas fa-plus mr-1"></i> Crear artículo
+                </a>
+            </div>
+        </div><!-- end Blog links -->
+        <a asp-controller="ContactAdmin" asp-action="List" class="nav-link">
+            <i class="fas fa-envelope"></i> Mensajes
+            <span class="badge badge-@(Model.UnreadMessagesContact > 0 ? "success" : "secondary")">
+                @Model.UnreadMessagesContact
+            </span>
+        </a>
+        <a asp-controller="LogEmail" asp-action="Index" class="nav-link">
+            <i class="fas fa-envelope"></i> Log emails
+        </a>
+        <a asp-controller="LogError" asp-action="Index" class="nav-link">
+            <i class="fas fa-exclamation-triangle"></i> Errores
+            <span id="unread-log-error-count"
+                  class="badge badge-@(Model.UnreadLogError > 0 ? "success" : "secondary")">
+                @Model.UnreadLogError
+            </span>
+        </a>
+    </nav>
+</div>

@@ -1,0 +1,59 @@
+.input-validation-error {
+  @extend .is-invalid;
+
+  font-size: 0.9rem;
+}
+
+.validation-summary-errors {
+  @extend .alert;
+  @extend .alert-danger;
+  @extend .alert-icon;
+
+  color: $danger;
+  padding-bottom: 0;
+
+  ul {
+    font-size: 0.9rem;
+    list-style-type: none;
+    padding-left: 0;
+  }
+}
+
+input,
+textarea {
+  @extend .rounded-0;
+}
+
+// custom-select fix
+// IE
+select::-ms-expand {
+  display: none;
+}
+
+// Firefox
+.custom-select {
+  outline: none;
+  overflow: hidden;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-indent: 0.01px;
+  text-overflow: '';
+}
+
+.input-group-append {
+  z-index: 0;
+}
+
+label {
+  color: darken(theme-color("primary"), 3%);
+}
+
+// Disable native datepicker in Google Chrome
+input::-webkit-calendar-picker-indicator {
+  display: none;
+}
+
+input[type="date"]::-webkit-input-placeholder {
+  visibility: hidden !important;
+}

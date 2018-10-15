@@ -1,0 +1,137 @@
+@model Web.ViewModels.ContactAdminViewModels.ListViewModel
+
+@{
+    ViewData["Title"] = "Mensajes de contacto";
+}
+
+
+@await Component.InvokeAsync("NavbarAdmin")
+
+<div id="contact-admin-list-vue" class="container-fluid" v-cloak>
+    <div class="row">
+        <div class="col-12">
+            <h1 class="title">@ViewData["Title"]</h1>
+
+            @await Html.PartialAsync("Grid/_GridHeader")
+
+            <!-- Filtros de búsqueda -->
+            <div class="row">
+                <div class="col-12">
+                    <div id="collapseFilters" class="collapse">
+                        <div class="row">
+                            <div class="col-md-6 col-lg-3 mb-2 input-group">
+                                <input asp-for="SendAt"
+                                       v-model="sendAt"
+                                       id="datetimepickerSendAt"
+                                       class="form-control form-control-sm"
+                                       placeholder="Fecha envío"
+                                       data-toggle="datetimepicker"
+                                       data-target="#datetimepickerSendAt">
+                                <span class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="far fa-calendar-alt"></i>
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="col-md-6 col-lg-3 mb-2">
+                                <input asp-for="EmailFrom"
+                                       class="form-control form-control-sm"
+                                       v-model="emailFrom"
+                                       placeholder="Usuario">
+                            </div>
+                            <div class="col-md-6 col-lg-3 mb-2">
+                                <input asp-for="Subject"
+                                       class="form-control form-control-sm"
+                                       v-model="subject"
+                                       placeholder="Asunto">
+                            </div>
+                            <div class="col-md-6 col-lg-3 mb-2">
+                                <input asp-for="Message"
+                                       class="form-control form-control-sm"
+                                       v-model="message"
+                                       placeholder="Mensaje">
+                            </div>
+                            <div class="col-md-6 col-lg-3 mb-2">
+                                <select asp-for="HasRead"
+                                        asp-items="@Model.HasReadChoices"
+                                        v-model="hasRead"
+                                        class="custom-select custom-select-sm">
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row my-2">
+                            <div class="col-12">
+                                <button @@click="onFilterReset" class="btn btn-sm btn-outline-info btn-unfocus">
+                                    <i class="fas fa-sync"></i> Reset
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- end Filtros de búsqueda -->
+
+            <!-- Tabla con datos -->
+            <div class="row">
+                <div class="col-12">
+                    <table class="table table-striped table-responsive-lg">
+                        <thead class="box box-dark">
+                        <tr>
+                            <th is="grid-column" :field="'sendAt'" field-name="Fecha envío"></th>
+                            <th is="grid-column" :field="'emailFrom'" field-name="Usuario"></th>
+                            <th is="grid-column" :field="'subject'" field-name="Asunto"></th>
+                            <th is="grid-column" :field="'message'" field-name="Mensaje"></th>
+                            <th is="grid-column" :field="'hasRead'" field-name="Leído"></th>
+                            <td>&nbsp;</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-show="loading">
+                            <td class="text-center" colspan="6">
+                                <img class="img-loading" src="~/static/dist/img/loading.gif" alt="loading">
+                                <small class="text-info">Cargando...</small>
+                            </td>
+                        </tr>
+                        <tr v-show="isEmptyAndNotLoading">
+                            <td class="text-center" colspan="6">
+                                <h5>No hay mensajes para mostrar</h5>
+                            </td>
+                        </tr>
+                        <tr v-for="contact in getObjectList">
+                            <td class="text-success">{{ contact.sendAt }}</td>
+                            <td>{{ contact.emailFrom }}</td>
+                            <td v-text="truncateText(contact.subject, 45)"></td>
+                            <td v-text="truncateText(contact.message, 25)"></td>
+                            <td class="text-center">
+                                <span v-if="contact.hasRead">
+                                    <i class="far fa-check-circle text-success"></i>
+                                </span>
+                                <span v-else>
+                                    <i class="fas fa-ban text-danger"></i>
+                                </span>
+                            </td>
+                            <td class="text-right">
+                                <a :href="getLinkContactDetails(contact.id)">
+                                    <i class="fas fa-eye text-info"></i>
+                                </a>
+                                <a @@click="onDelete(contact.id)" class="ml-3" href="javascript:void(0)">
+                                    <i class="fas fa-trash text-danger"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div><!-- end Tabla con datos -->
+
+            @await Html.PartialAsync("Grid/_GridPaginate")
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <script>
+        ContactAdminListVue()
+    </script>
+}

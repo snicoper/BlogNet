@@ -1,0 +1,20 @@
+﻿<div class="row">
+    <div class="col-12 d-flex flex-row">
+        <span class="mr-auto mt-2 small text-muted">
+            Mostrando {{ objectList.length }} de {{ totalItems }} items
+        </span>
+        <paginate v-show="totalPages > 1" ref="paginate"
+                  :page-count="totalPages || 0"
+                  :click-handler="onChangePagination"
+                  :prev-text="'<'"
+                  :next-text="'>'"
+                  :container-class="'pagination'"
+                  :page-class="'page-item'"
+                  :page-link-class="'page-link btn-unfocus'"
+                  :next-class="'page-item'"
+                  :prev-class="'page-item'"
+                  :next-link-class="'page-link btn-unfocus'"
+                  :prev-link-class="'page-link btn-unfocus'">
+        </paginate>
+    </div>
+</div>

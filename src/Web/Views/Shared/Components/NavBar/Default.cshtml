@@ -1,0 +1,228 @@
+@model NavBarViewModel
+
+<div class="navbar-search hidden">
+    <section class="row">
+        <div class="col-12">
+            <form asp-controller="Article" asp-action="Search" asp-route-page="1" method="get">
+                <div class="form-group">
+                    <span class="close navbar-search-close">&times;</span>
+                    <input class="form-control navbar-search-input"
+                           name="q"
+                           type="search"
+                           placeholder="Escribe y pulsa intro...">
+                </div>
+            </form>
+        </div>
+    </section>
+</div>
+
+<nav id="main-navbar" class="navbar navbar-expand-lg fixed-top navbar-light bg-white shadow-md">
+    <a href="/" class="navbar-brand">
+        <img src="~/static/dist/img/logo.png" width="30" height="30" alt="logo">
+        @Model.SiteName
+    </a>
+
+    <button class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <!-- lg o mayor -->
+        <div class="d-none d-lg-block ml-auto">
+            <ul class="navbar-nav">
+                <li asp-active-controllers="Article"
+                    asp-active-actions="List"
+                    asp-active-class="active"
+                    class="nav-item">
+                    <a asp-controller="Article" asp-action="List" class="nav-link">
+                        <i class="fas fa-home"></i> Inicio
+                    </a>
+                </li>
+                <li asp-active-controllers="Contact"
+                    asp-active-actions="Create"
+                    asp-active-class="active"
+                    class="nav-item">
+                    <a asp-action="Create"
+                       asp-controller="Contact"
+                       class="nav-link">
+                        <i class="fas fa-envelope"></i> Contacto
+                    </a>
+                </li>
+                <li asp-active-controllers="Page"
+                    asp-active-actions="About"
+                    asp-active-class="active"
+                    class="nav-item">
+                    <a asp-controller="Page"
+                       asp-action="About"
+                       class="nav-link">
+                        <i class="fas fa-address-card"></i> Sobre mi
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link navbar-search-button" href="javascript:void(0);">
+                        <i class="fas fa-search"></i>
+                    </a>
+                </li>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle"
+                           href="#"
+                           id="navbarDropdown"
+                           role="button"
+                           data-toggle="dropdown"
+                           aria-haspopup="true"
+                           aria-expanded="false">
+                            <i class="fas fa-user"></i> @User.Identity.Name
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right border-0 rounded-0">
+                            <a asp-action="Profile" asp-controller="Account" class="dropdown-item">
+                                <i class="fas fa-user"></i> Perfil
+                            </a>
+                            @if (User.IsInRole("Admins"))
+                            {
+                                <div class="dropdown-divider"></div>
+                                <a asp-action="Index" asp-controller="Admin" class="dropdown-item">
+                                    <i class="fas fa-users"></i> Administración
+                                </a>
+                                <a asp-controller="ContactAdmin" asp-action="List" class="dropdown-item">
+                                    <i class="fas fa-comment"></i>
+                                    Mensajes de contacto
+                                    @if (Model.ContactUnreadMessages > 0)
+                                    {
+                                        <span class="badge badge-success ml-4">@Model.ContactUnreadMessages</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-secondary ml-4">@Model.ContactUnreadMessages</span>
+                                    }
+                                </a>
+                            }
+                            <div class="dropdown-divider"></div>
+                            <a asp-action="Logout" asp-controller="Account" class="dropdown-item">
+                                <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+                            </a>
+                        </div>
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item">
+                        <a asp-action="Register" asp-controller="Account" class="nav-link">
+                            <i class="fas fa-user-plus"></i> Registrar
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-action="Login"
+                           asp-controller="Account"
+                           asp-route-returnUrl="@Context.Request.Path"
+                           class="nav-link">
+                            <i class="fas fa-sign-in-alt"></i> Iniciar sesión
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div><!-- end lg o mayor -->
+
+        <!-- md o menor -->
+        <div class="d-lg-none">
+            <ul class="navbar-nav">
+                <li asp-active-controllers="Article"
+                    asp-active-actions="List"
+                    asp-active-class="active"
+                    class="nav-item">
+                    <a asp-controller="Article" asp-action="List" class="nav-link">
+                        <i class="fas fa-home"></i> Inicio
+                    </a>
+                </li>
+                <li asp-active-controllers="Contact"
+                    asp-active-actions="Create"
+                    asp-active-class="active"
+                    class="nav-item">
+                    <a asp-action="Create" asp-controller="Contact" class="nav-link">
+                        <i class="fas fa-envelope"></i> Contacto
+                    </a>
+                </li>
+                <li asp-active-controllers="Page"
+                    asp-active-actions="About"
+                    asp-active-class="active"
+                    class="nav-item">
+                    <a asp-controller="Page"
+                       asp-action="About"
+                       class="nav-link">
+                        <i class="fas fa-address-card"></i> Sobre mi
+                    </a>
+                </li>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <li asp-active-controllers="Account"
+                        asp-active-actions="Profile"
+                        asp-active-class="active"
+                        class="nav-item">
+                        <a asp-action="Profile" asp-controller="Account" class="nav-link">
+                            <i class="fas fa-user"></i> Perfil
+                        </a>
+                    </li>
+                    if (User.IsInRole("Admins"))
+                    {
+                        <li class="nav-item">
+                            <div class="dropdown-divider"></div>
+                        </li>
+                        <li asp-active-controllers="Admin"
+                            asp-active-actions="Index"
+                            asp-active-class="active"
+                            class="nav-item">
+                            <a asp-action="Index" asp-controller="Admin" class="nav-link">
+                                <i class="fas fa-users"></i> Administración
+                            </a>
+                        </li>
+                        <li asp-active-controllers="ContactAdmin"
+                            asp-active-actions="List"
+                            asp-active-class="active"
+                            class="nav-item">
+                            <a asp-controller="ContactAdmin" asp-action="List" class="nav-link">
+                                <i class="fas fa-comment"></i>
+                                Mensajes de contacto
+                                @if (Model.ContactUnreadMessages > 0)
+                                {
+                                    <span class="badge badge-success">@Model.ContactUnreadMessages</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-secondary">@Model.ContactUnreadMessages</span>
+                                }
+                            </a>
+                        </li>
+                    }
+                    <li class="nav-item">
+                        <div class="dropdown-divider"></div>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-action="Logout" asp-controller="Account" class="nav-link">
+                            <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+                        </a>
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item">
+                        <a asp-action="Login" asp-controller="Account" asp-route-returnUrl="@Context.Request.Path" class="nav-link">
+                            <i class="fas fa-user-plus"></i> Registrar
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-action="Login" asp-controller="Account" asp-route-returnUrl="@Context.Request.Path" class="nav-link">
+                            <i class="fas fa-sign-in-alt"></i> Iniciar sesión
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div><!-- end md o menor -->
+    </div>
+</nav>

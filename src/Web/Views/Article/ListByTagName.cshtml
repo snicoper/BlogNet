@@ -1,0 +1,11 @@
+﻿@using Web.ViewModels.ArticleViewModels
+@model Web.ViewModels.ArticleViewModels.ListViewModel
+
+@{
+    ViewData["Title"] = "Lista de artículos";
+}
+
+<div class="container mt-2">
+    @await Html.PartialAsync("_ArticleList", Model)
+    @await Component.InvokeAsync("Paginator", Model)
+</div>

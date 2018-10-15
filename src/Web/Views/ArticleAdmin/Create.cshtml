@@ -1,0 +1,47 @@
+@model Web.ViewModels.ArticleAdminViewModels.CreateEditViewModel
+
+@{
+    ViewData["Title"] = "Crear articulo";
+}
+
+@section styles
+{
+    @await Html.PartialAsync("_CreateEditStyles")
+}
+
+
+@await Component.InvokeAsync("NavbarAdmin")
+
+<div id="article-admin-create-edit-vue" class="container" v-cloak>
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="title">@ViewData["Title"]</h1>
+
+            <div>
+                <img id="image-header"
+                     class="image-edit-article shadow-md hidden"
+                     src=""
+                     alt="Imagen de cabecera">
+            </div>
+
+            <form asp-action="Create" method="post" enctype="multipart/form-data">
+                @await Html.PartialAsync("_CreateEditForm", Model)
+
+                <div>
+                    <hr>
+                    <button class="btn btn-primary" type="submit">
+                        <i class="fas fa-plus"></i> Crear
+                    </button>
+                    <a asp-action="List" class="btn btn-secondary">
+                        <i class="fas fa-angle-left"></i> Volver
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    @await Html.PartialAsync("_CreateEditScripts")
+}

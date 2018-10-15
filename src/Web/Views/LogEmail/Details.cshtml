@@ -1,0 +1,61 @@
+@model LogEmail
+
+@{
+    ViewData["Title"] = "Detalles email enviado";
+}
+
+
+@await Component.InvokeAsync("NavbarAdmin")
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="title">Detalles email enviado</h1>
+
+            <div class="col-lg-8 m-auto">
+                <div class="alert alert-info alert-icon">
+                    Si el email es <strong>HTML</strong> puede verse de una manera muy distinta al original.
+                </div>
+            </div>
+
+            <div class="box box-default">Información del email</div>
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <th>From</th>
+                        <td>@Model.From</td>
+                    </tr>
+                    <tr>
+                        <th>To</th>
+                        <td>@Model.To</td>
+                    </tr>
+                    <tr>
+                        <th>Asunto</th>
+                        <td>@Model.Subject</td>
+                    </tr>
+                    <tr>
+                        <th>Fecha de envío</th>
+                        <td>@Model.SendAt</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="box box-default">Mensaje del email</div>
+            <div style="overflow-x: auto">
+                @Html.Raw(Model.Message.Replace("\n", "<br>").Replace("<script", ""))
+            </div>
+
+            <div>
+                <hr>
+                <form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="fas fa-angle-left"></i> Volver
+                    </a>
+                    <button class="btn btn-danger" type="submit">
+                        <i class="fas fa-trash"></i> Eliminar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

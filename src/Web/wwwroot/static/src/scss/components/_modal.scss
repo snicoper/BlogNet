@@ -1,0 +1,9 @@
+.modal-xl {
+  min-width: 70% !important;
+
+  @include media-breakpoint-down(lg) {
+    min-width: 100% !important;
+    margin-left: 8px;
+  }
+}
+

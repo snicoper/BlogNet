@@ -1,0 +1,67 @@
+# File types #
+##############
+*.pyc
+*.swn
+*.swo
+*.swp
+*.db
+*.log
+*.sqlite3
+!.keep
+
+# Directories #
+###############
+dist
+node_modules/
+
+appsettings.json
+
+src/Web/wwwroot/media/*
+!src/Web/wwwroot/media/dummy-image.jpg
+!src/Web/wwwroot/media/accounts/
+src/Web/wwwroot/media/accounts/*
+!src/Web/wwwroot/media/accounts/profiles/
+src/Web/wwwroot/media/accounts/profiles/*
+!src/Web/wwwroot/media/accounts/profiles/user.png
+
+# Editors and IDEs #
+####################
+.idea/
+.vs/
+
+# Build results #
+#################
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+build/
+bld/
+[Bb]in/
+[Oo]bj/
+msbuild.log
+msbuild.err
+msbuild.wrn
+
+# Specific files #
+##################
+yarn.lock
+[Ll]ogs/
+
+# User-specific files #
+#######################
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# OS generated files #
+######################
+*~
+.directory
+.DS_Store?
+Icon?
+thumbs.db
+Thumbs.db

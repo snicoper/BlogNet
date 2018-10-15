@@ -1,0 +1,71 @@
+﻿@model Web.ViewModels.TagAdminViewModels.EditViewModel
+
+@{
+    ViewBag.Title = "Crear nueva etiqueta";
+}
+
+
+@await Component.InvokeAsync("NavbarAdmin")
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="title">@ViewData["Title"]</h1>
+
+            <div class="text-center">
+                <img src="~/media/@Model.Tag.Image"
+                     id="img-tag"
+                     class="img-fluid img-tag-edit"
+                     alt="Imagen tag">
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8 m-auto">
+                    <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly"></div>
+                        <input asp-for="Tag.Id" type="hidden">
+                        <input asp-for="Tag.Image" type="hidden">
+                        <input asp-for="OldImage" type="hidden">
+
+                        <div class="form-group">
+                            <label asp-for="Tag.Name"></label>
+                            <input asp-for="Tag.Name" class="form-control">
+                            <span asp-validation-for="Tag.Name" class="small text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Tag.Slug"></label>
+                            <input asp-for="Tag.Slug" class="form-control">
+                            <span class="small text-muted">Si se deja en blanco, se auto genera</span><br>
+                            <span asp-validation-for="Tag.Slug" class="small text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <div class="custom-file">
+                                <input asp-for="Image" class="custom-file-input">
+                                <label asp-for="Image" class="custom-file-label">Selecciona una imagen</label>
+                            </div>
+                            <span asp-validation-for="Image" class="small text-danger"></span>
+                        </div>
+
+                        <div>
+                            <button class="btn btn-primary" type="submit">
+                                <i class="fas fa-plus"></i> Editar
+                            </button>
+                            <a asp-action="List" class="btn btn-secondary">
+                                <i class="fas fa-angle-left"></i> Volver
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <script>
+        $("#Image").change(function(){
+            readImagePreview('#img-tag', this)
+        });
+    </script>
+}

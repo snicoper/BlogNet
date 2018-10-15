@@ -1,0 +1,54 @@
+﻿@model Web.ViewModels.ArticleAdminViewModels.CreateEditViewModel
+
+@{
+    ViewData["Title"] = "Editar artículo";
+}
+
+@section styles
+{
+    @await Html.PartialAsync("_CreateEditStyles")
+}
+
+
+@await Component.InvokeAsync("NavbarAdmin")
+
+<div id="article-admin-create-edit-vue" class="container" v-cloak>
+    <div class="row">
+        <div class="col-12">
+            <h1 class="title">@ViewData["Title"]</h1>
+
+            <div>
+                <img id="image-header"
+                     class="image-edit-article shadow-md @(!string.IsNullOrEmpty(Model.CurrentImageHeader) ? "" : "hidden")"
+                     src="~/media/@Model.CurrentImageHeader"
+                     alt="Imagen de cabecera">
+            </div>
+
+            <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                @await Html.PartialAsync("_CreateEditForm", Model)
+                <input asp-for="Id" type="hidden">
+                <input asp-for="CurrentImageHeader" type="hidden">
+
+                <div>
+                    <hr>
+                    <button class="btn btn-primary" type="submit">
+                        <i class="far fa-edit"></i> Editar
+                    </button>
+                    <a asp-action="List" class="btn btn-secondary">
+                        <i class="fas fa-angle-left"></i> Volver
+                    </a>
+                </div>
+            </form>
+            <form asp-action="Delete" method="post" class="mt-4">
+                <button class="btn btn-danger" type="submit">
+                    <i class="fas fa-trash"></i> Eliminar
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    @await Html.PartialAsync("_CreateEditScripts")
+}

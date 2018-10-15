@@ -1,0 +1,79 @@
+@model Web.ViewModels.AccountAdminViewModels.CreateViewModel
+
+@{
+    ViewData["Title"] = "Creación nuevo usuario";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="title">@ViewData["Title"]</h1>
+        </div>
+
+        <div class="col-lg-8 m-auto">
+            <form asp-action="Create" method="post">
+                <div asp-validation-summary="ModelOnly"></div>
+
+                <div class="form-group">
+                    <label asp-for="UserName"></label>
+                    <input asp-for="UserName" class="form-control">
+                    <span asp-validation-for="UserName" class="small text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Email"></label>
+                    <input asp-for="Email" class="form-control">
+                    <span asp-validation-for="Email" class="small text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Password"></label>
+                    <input asp-for="Password" class="form-control">
+                    <span asp-validation-for="Password" class="small text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ConfirmPassword"></label>
+                    <input asp-for="ConfirmPassword" class="form-control">
+                    <span asp-validation-for="ConfirmPassword" class="small text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PhoneNumber"></label>
+                    <input asp-for="PhoneNumber" class="form-control">
+                    <span asp-validation-for="PhoneNumber" class="small text-danger"></span>
+                </div>
+
+                <div class="form-group custom-control custom-checkbox">
+                    <input asp-for="EmailConfirmed" class="custom-control-input">
+                    <label asp-for="EmailConfirmed" class="custom-control-label"></label>
+                    <small class="form-text text-muted">
+                        Si no se selecciona, cuando el usuario inicie sesión deberá validar el email
+                    </small>
+                </div>
+
+                <h5>Roles</h5>
+                @foreach (var role in Model.Roles)
+                {
+                    <div class="form-group custom-control custom-checkbox">
+                        <input id="@role.Id"
+                               class="custom-control-input"
+                               type="checkbox"
+                               name="IdRolesToAdd"
+                               value="@role.Name">
+                        <label class="custom-control-label" for="@role.Id">
+                            @role.Name
+                        </label>
+                    </div>
+                }
+                <span asp-validation-for="IdRolesToAdd" class="text-danger small"></span>
+
+                <div>
+                    <hr>
+                    <button class="btn btn-primary" type="submit">
+                        <i class="fas fa-user-plus"></i> Crear
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="fas fa-angle-left"></i> Volver
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

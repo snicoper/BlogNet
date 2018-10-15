@@ -1,0 +1,166 @@
+@model Web.ViewModels.ArticleAdminViewModels.CreateEditViewModel
+
+<div asp-validation-summary="ModelOnly"></div>
+
+<div class="row">
+    <div class="form-group col-12">
+        <label asp-for="OwnerId"></label>
+        <select asp-for="OwnerId" class="custom-select">
+            @if (!string.IsNullOrEmpty(Model.OwnerId))
+            {
+                <option value="@Model.OwnerId" selected>@Model.OwnerUserName</option>
+            }
+        </select>
+        <span asp-validation-for="OwnerId" class="small text-danger"></span>
+    </div>
+    <div class="form-group col-12">
+        <label asp-for="DefaultTagId"></label>
+        <select asp-for="DefaultTagId"
+                asp-items="@Model.TagList"
+                class="custom-select">
+            <option value=""></option>
+        </select>
+        <span class="small text-muted">
+            Mostrara la imagen de la etiqueta principal en la lista de artículos
+        </span>
+        <span asp-validation-for="DefaultTagId" class="small text-danger"></span>
+    </div>
+    <div class="form-group col-12">
+        <label asp-for="Tags"></label>
+        <select asp-for="Tags"
+                asp-items="@Model.TagList"
+                class="custom-select"
+                multiple>
+            <option value=""></option>
+        </select>
+        <span asp-validation-for="Tags" class="small text-danger"></span>
+    </div>
+    <div class="form-group col-12">
+        <label asp-for="Title"></label>
+        <input asp-for="Title" class="form-control">
+        <span asp-validation-for="Title" class="small text-danger"></span>
+    </div>
+    <div class="form-group col-12">
+        <label asp-for="Slug"></label>
+        <input asp-for="Slug" class="form-control">
+        <span class="small text-muted">Si se deja en blanco se auto genera</span><br>
+        <span asp-validation-for="Slug" class="small text-danger"></span>
+    </div>
+    <div class="form-group col-12">
+        <div class="custom-file">
+            <input asp-for="ImageHeader" class="custom-file-input" type="file">
+            <label asp-for="ImageHeader" class="custom-file-label"></label>
+        </div>
+    </div>
+    <div class="form-group col-12">
+        <div class="border" v-pre>
+            <textarea asp-for="Body" class="form-control" rows="12"></textarea>
+        </div>
+        <span class="small text-muted">
+            <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet" target="_blank">
+                <i class="fas fa-external-link-alt"></i> Markdown referencia
+            </a>
+        </span>
+
+        <!-- Insert video -->
+        <div class="my-2 float-right ml-2">
+            <button class="btn btn-sm btn-primary" type="button" data-toggle="modal" data-target="#modal-insert-video">
+                <i class="fab fa-youtube"></i> Insertar video
+            </button>
+        </div><!-- end Insert video -->
+
+        <!-- Upload image -->
+        <div class="my-2 float-right inputfile">
+            <input id="upload-image" type="file" accept="image/*" @@change="uploadImage($event)">
+            <label v-show="!loadingImage" for="upload-image">
+                <i class="fas fa-image"></i>
+                Insertar imagen
+            </label>
+            <label v-show="loadingImage" class="disabled" for="upload-image">
+                <i class="fas fa-circle-notch fa-spin"></i>
+                Cargando imagen
+            </label>
+        </div><!-- end Upload image -->
+    </div>
+    <div class="form-group col-12">
+        <div class="custom-control custom-checkbox">
+            <input asp-for="Active" class="custom-control-input">
+            <label asp-for="Active" class="custom-control-label"></label>
+        </div>
+    </div>
+    <div class="col-lg-12 form-group">
+        <div class="custom-control custom-checkbox">
+            <input asp-for="TableOfContents" class="custom-control-input">
+            <label asp-for="TableOfContents" class="custom-control-label"></label><br>
+            <small class="small text-muted">¿Añadir tabla de contenidos?</small>
+        </div>
+    </div>
+    <div class="form-group col-lg-3">
+        <label asp-for="Views"></label>
+        <input asp-for="Views" class="form-control">
+        <span asp-validation-for="Views" class="small text-danger"></span>
+    </div>
+    <div class="form-group col-lg-3">
+        <label asp-for="Likes"></label>
+        <input asp-for="Likes" class="form-control">
+        <span asp-validation-for="Likes" class="small text-danger"></span>
+    </div>
+    <div class="col-12">
+        <div class="row">
+            <div class="col-lg-6 ">
+                <label asp-for="CreateAt"></label>
+                <div class="input-group">
+                    <input asp-for="CreateAt"
+                           asp-format="{0:dd/MM/yyyy HH:mm}"
+                           class="form-control form-control"
+                           placeholder="dd/mm/yyyy HH:mm">
+                    <span class="input-group-append">
+                        <span class="input-group-text">
+                            <i class="far fa-calendar-alt"></i>
+                        </span>
+                    </span>
+                </div>
+                <span class="small text-muted">dd/mm/yyyy hh:mm</span>
+            </div>
+            <div class="col-lg-6 ">
+                <label asp-for="UpdateAt"></label>
+                <div class="input-group">
+                    <input asp-for="UpdateAt"
+                           asp-format="{0:dd/MM/yyyy HH:mm}"
+                           class="form-control form-control"
+                           placeholder="dd/mm/yyyy HH:mm">
+                    <span class="input-group-append">
+                        <span class="input-group-text">
+                            <i class="far fa-calendar-alt"></i>
+                        </span>
+                    </span>
+                </div>
+                <span class="small text-muted">dd/mm/yyyy hh:mm</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal insert video -->
+<div class="modal fade" id="modal-insert-video">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Insertar video de YouTube</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-info alert-icon">
+                    Se ha de copiar la parte de <strong>Embed Video</strong>
+                </div>
+                <div class="form-group">
+                    <label for="url-video">URL Video</label>
+                    <input v-model="urlInsertVideo" id="url-video" type="text" class="form-control">
+                </div>
+                <button @@click="onInsertVideo" class="btn btn-primary btn-unfocus" type="button">Insertar</button>
+            </div>
+        </div>
+    </div>
+</div><!-- end Modal insert video -->

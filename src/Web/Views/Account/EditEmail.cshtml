@@ -1,0 +1,46 @@
+@model Web.ViewModels.AccountViewModels.EditEmailViewModel
+
+@{
+    ViewData["Title"] = "Editar email";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="row">
+                <div class="col-lg-8 m-auto shadow-sm">
+                    <form asp-action="EditEmail" method="post">
+                        <h1 class="title">@ViewData["Title"]</h1>
+
+                        @if (Model.RequireConfirmedEmail)
+                        {
+                            <div class="alert alert-info alert-icon">
+                                El nuevo email deberá ser verificado, hasta que no se verifique, se seguirá
+                                usando el actual (<strong>@Model.CurrentEmail</strong>).
+                            </div>
+                        }
+
+                        <div asp-validation-summary="ModelOnly"></div>
+                        <input asp-for="CurrentEmail">
+                        <input asp-for="RequireConfirmedEmail">
+
+                        <div class="form-group">
+                            <label asp-for="NewEmail"></label>
+                            <input asp-for="NewEmail" class="form-control">
+                            <span asp-validation-for="NewEmail" class="small text-danger"></span>
+                        </div>
+
+                        <div class="mb-2">
+                            <button class="btn btn-primary" type="submit">
+                                <i class="fas fa-pencil-alt"></i> Editar
+                            </button>
+                            <a asp-action="Profile" class="btn btn-secondary">
+                                <i class="fas fa-angle-left"></i> Cancelar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

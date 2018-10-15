@@ -1,0 +1,42 @@
+@model Web.ViewModels.AccountViewModels.LoginViewModel
+
+@{
+    ViewData["Title"] = "Iniciar sesión";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="row">
+                <div class="col-lg-6 m-auto shadow-sm">
+                    <form asp-action="Login" method="post">
+                        <h1>@ViewData["Title"]</h1>
+                        <hr>
+                        <div asp-validation-summary="ModelOnly"></div>
+                        <input type="hidden" name="returnUrl" value="@ViewData["returnUrl"]">
+
+                        <div class="form-group">
+                            <label asp-for="UserName"></label>
+                            <input asp-for="UserName" class="form-control">
+                            <span asp-validation-for="UserName" class="small text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Password"></label>
+                            <input asp-for="Password" class="form-control">
+                            <span asp-validation-for="Password" class="small text-danger"></span>
+                        </div>
+                        <div class="custom-control custom-checkbox">
+                            <input asp-for="Remember" class="custom-control-input">
+                            <label asp-for="Remember" class="custom-control-label"></label>
+                        </div>
+                        <div class="my-2">
+                            <button class="btn btn-primary btn-xs-block" type="submit">Identificarse</button>
+                            <a asp-action="Register" class="btn btn-primary btn-xs-block">Registro</a>
+                            <a asp-action="RecoveryPassword" class="btn btn-light btn-xs-block">¿Olvidaste la contraseña?</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,50 @@
+@model Contact
+
+@{
+    ViewData["Title"] = "Detalles mensaje de contacto";
+}
+
+
+@await Component.InvokeAsync("NavbarAdmin")
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="title">@ViewData["Title"]</h1>
+
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <th>Fecha de envío</th>
+                        <td class="text-right">@Model.SendAt</td>
+                    </tr>
+                    <tr>
+                        <th>Enviado por</th>
+                        <td class="text-right">@Model.EmailFrom</td>
+                    </tr>
+                    <tr>
+                        <th>Asunto</th>
+                        <td class="text-right">@Model.Subject</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="box box-default">Mensaje</div>
+            <div class="mt-2">
+                @Html.Raw(Model.Message.Replace("\n", "<br>").Replace("<script", ""))
+            </div>
+
+            <div>
+                <hr>
+                <form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+                    <a asp-action="List" class="btn btn-secondary">
+                        <i class="fas fa-angle-left"></i> Volver
+                    </a>
+                    <button class="btn btn-danger" type="submit">
+                        <i class="fas fa-trash"></i> Eliminar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

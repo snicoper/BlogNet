@@ -1,0 +1,60 @@
+@model Web.ViewModels.AccountViewModels.EditPhotoViewModel
+
+@{
+    ViewData["Title"] = "Cambiar foto";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="title">@ViewData["Title"]</h1>
+
+            <div class="row">
+                <div class="col-12 text-center">
+                    <img src="~/media/@Model.CurrentPhoto"
+                         alt="Avatar usuario"
+                         id="photo"
+                         class="img-fluid rounded shadow-sm"
+                         width="160">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <form asp-action="EditPhoto" method="post" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly"></div>
+
+                        <input asp-for="CurrentPhoto">
+
+                        <div class="custom-control custom-checkbox">
+                            <input asp-for="Restore" class="custom-control-input">
+                            <label asp-for="Restore" class="custom-control-label"></label>
+                        </div>
+                        <div class="custom-file mt-3">
+                            <input asp-for="UploadPhoto" class="custom-file-input" type="file">
+                            <label asp-for="UploadPhoto" class="custom-file-label"></label>
+                            <span asp-validation-for="UploadPhoto" class="small text-danger"></span>
+                        </div>
+                        <div class="mt-3">
+                            <button class="btn btn-primary" type="submit">
+                                <i class="far fa-edit"></i> Cambiar imagen
+                            </button>
+                            <a asp-action="Profile" class="btn btn-secondary">
+                                <i class="fas fa-angle-left"></i> Volver
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <script>
+        $('#UploadPhoto').on('change', function () {
+            readImagePreview('#photo', this)
+        })
+    </script>
+}
